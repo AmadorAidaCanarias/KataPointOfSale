@@ -14,6 +14,13 @@ namespace KataPointOfSsale {
             var result = scanCode.Decode("12345");
             Assert.AreEqual(desiredResult, result);
         }
+
+        [Test]
+        public void should_display_twelve_and_fifty_when_send_23456() {
+            var desiredResult = "$12.50";
+            var result = scanCode.Decode("23456");
+            Assert.AreEqual(desiredResult, result);
+        }
     }
 
     public class ScanCode {
