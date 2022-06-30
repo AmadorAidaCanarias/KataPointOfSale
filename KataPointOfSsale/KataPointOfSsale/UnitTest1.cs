@@ -26,6 +26,7 @@ namespace KataPointOfSsale {
     public class ScanCode {
         public string Decode(string code) {
             if (code.Equals("12345")) return "$7.25";
+            if (code.Equals("23456")) return "$12.50";
             return null;
         }
     }
