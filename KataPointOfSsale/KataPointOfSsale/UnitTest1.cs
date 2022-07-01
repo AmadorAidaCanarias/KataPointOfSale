@@ -35,6 +35,13 @@ namespace KataPointOfSsale {
             var result = scanCode.Decode(string.Empty);
             Assert.AreEqual(desiredResult, result);
         }
+
+        [Test]
+        public void should_display_sum_from_all_barcode_when_send_total_and_12345_and_23456() {
+            var desiredResult = "$19.75";
+            var result = scanCode.Decode("Total: 12345, 23456");
+            Assert.AreEqual(desiredResult, result);
+        }
     }
 
     public class ScanCode {
