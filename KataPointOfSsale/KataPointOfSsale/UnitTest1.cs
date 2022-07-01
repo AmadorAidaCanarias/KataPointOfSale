@@ -42,6 +42,7 @@ namespace KataPointOfSsale {
             if (code.Equals("12345")) return "$7.25";
             if (code.Equals("23456")) return "$12.50";
             if (code.Equals("99999")) return "Error: barcode not found";
+            if (code.Equals(string.Empty)) return "Error: empty barcode";
             return null;
         }
     }
