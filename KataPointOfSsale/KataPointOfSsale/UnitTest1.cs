@@ -28,6 +28,13 @@ namespace KataPointOfSsale {
             var result = scanCode.Decode("99999");
             Assert.AreEqual(desiredResult, result);
         }
+
+        [Test]
+        public void should_display_error_empty_barcode_when_send_empty_string() {
+            var desiredResult = "Error: empty barcode";
+            var result = scanCode.Decode(string.Empty);
+            Assert.AreEqual(desiredResult, result);
+        }
     }
 
     public class ScanCode {
