@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace KataPointOfSsale {
     public class Tests {
 
@@ -52,14 +54,57 @@ namespace KataPointOfSsale {
     }
 
     public class ScanCode {
+
+        private Dictionary<string, decimal> prices;
+
+        public ScanCode() {
+            prices = new Dictionary<string, decimal>();
+            prices.Add("12345", (decimal)7.25);
+            prices.Add("23456", (decimal)12.50);
+            prices.Add("99999", (decimal)0.0);
+        }
+
         public string Decode(string code) {
-            if (code.Equals("12345")) return "$7.25";
-            if (code.Equals("23456")) return "$12.50";
-            if (code.Equals("99999")) return "Error: barcode not found";
-            if (code.Equals(string.Empty)) return "Error: empty barcode";
-            if (code.Equals("Total: 12345, 23456")) return "$19.75";
-            if (code.Equals("Total: 12345, 23456, 99999")) return "$19.75";
-            return null;
+            var error = CheckErrors(code);
+            if (error != String.Empty) return error;
+            var codes = GetCodes(code);
+            var price = GetTotalPrice(codes);
+            return GetFormatString(price);
+        }
+
+        private static string GetFormatString(decimal price) {
+            var result = $"${price.ToString("N2", CultureInfo.InvariantCulture)}";
+            if (price == (decimal)0.0) {
+                result = "Error: barcode not found";
+            }
+            return result;
+        }
+
+        private decimal GetTotalPrice(IEnumerable<string> codes) {
+            decimal price = 0;
+            foreach (var row in codes) price += GetPrice(row);
+            return price;
+        }
+
+        private static IEnumerable<string> GetCodes(string code) {
+            return code
+                .Split(",")
+                .ToList()
+                .Select(row => row.Replace("Total:", "").Trim());
+        }
+
+        private string CheckErrors(string code) =>
+            code switch {
+                "" => "Error: empty barcode",
+                "99999" => "Error: barcode not found",
+                _ => string.Empty
+            };
+
+        private decimal GetPrice(string code) {
+            return prices
+                    .Where(row => row.Key == code)
+                    .Select(row => row.Value)
+                    .First();
         }
     }
 }
