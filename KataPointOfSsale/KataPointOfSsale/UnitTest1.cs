@@ -21,6 +21,13 @@ namespace KataPointOfSsale {
             var result = scanCode.Decode("23456");
             Assert.AreEqual(desiredResult, result);
         }
+
+        [Test]
+        public void should_display_error_barcode_not_found_when_send_99999() {
+            var desiredResult = "Error: barcode not found";
+            var result = scanCode.Decode("99999");
+            Assert.AreEqual(desiredResult, result);
+        }
     }
 
     public class ScanCode {
